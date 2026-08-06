@@ -1,0 +1,16 @@
+{"features":{"novelty":1.0,"periodicity":0.05,"rise_rate":0.000000015,"decay_rate":-0.000000002,"color_evolution":0.22,"quality":0.95,"mean_magnitude_error":0.03},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.10,"rise_rate":0.000000011,"decay_rate":-0.000000001,"color_evolution":0.18,"quality":0.90,"mean_magnitude_error":0.04},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.16,"rise_rate":0.000000009,"decay_rate":-0.000000003,"color_evolution":0.14,"quality":0.92,"mean_magnitude_error":0.04},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.08,"rise_rate":0.000000018,"decay_rate":-0.000000004,"color_evolution":0.30,"quality":0.85,"mean_magnitude_error":0.05},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.21,"rise_rate":0.000000007,"decay_rate":-0.000000002,"color_evolution":0.12,"quality":0.88,"mean_magnitude_error":0.05},"label":1}
+{"features":{"novelty":0.45,"periodicity":0.12,"rise_rate":0.000000006,"decay_rate":-0.000000001,"color_evolution":0.08,"quality":0.90,"mean_magnitude_error":0.04},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.14,"rise_rate":0.000000010,"decay_rate":-0.000000003,"color_evolution":0.20,"quality":0.78,"mean_magnitude_error":0.07},"label":1}
+{"features":{"novelty":1.0,"periodicity":0.18,"rise_rate":0.000000008,"decay_rate":-0.000000001,"color_evolution":0.15,"quality":0.82,"mean_magnitude_error":0.06},"label":1}
+{"features":{"novelty":0.12,"periodicity":0.92,"rise_rate":0.000000010,"decay_rate":-0.000000020,"color_evolution":0.01,"quality":0.96,"mean_magnitude_error":0.03},"label":0}
+{"features":{"novelty":0.12,"periodicity":0.85,"rise_rate":0.000000003,"decay_rate":-0.000000014,"color_evolution":0.02,"quality":0.92,"mean_magnitude_error":0.04},"label":0}
+{"features":{"novelty":0.02,"periodicity":0.48,"rise_rate":0.000000008,"decay_rate":0.000000001,"color_evolution":0.04,"quality":0.88,"mean_magnitude_error":0.05},"label":0}
+{"features":{"novelty":0.02,"periodicity":0.54,"rise_rate":0.000000006,"decay_rate":0.000000002,"color_evolution":0.03,"quality":0.80,"mean_magnitude_error":0.06},"label":0}
+{"features":{"novelty":1.0,"periodicity":0.03,"rise_rate":0.000000001,"decay_rate":0.000000000,"color_evolution":0.11,"quality":0.05,"mean_magnitude_error":0.42},"label":0}
+{"features":{"novelty":1.0,"periodicity":0.09,"rise_rate":0.000000000,"decay_rate":0.000000000,"color_evolution":0.05,"quality":0.12,"mean_magnitude_error":0.35},"label":0}
+{"features":{"novelty":0.45,"periodicity":0.68,"rise_rate":0.000000002,"decay_rate":-0.000000005,"color_evolution":0.03,"quality":0.88,"mean_magnitude_error":0.04},"label":0}
+{"features":{"novelty":0.12,"periodicity":0.78,"rise_rate":0.000000004,"decay_rate":-0.000000010,"color_evolution":0.00,"quality":0.95,"mean_magnitude_error":0.03},"label":0}

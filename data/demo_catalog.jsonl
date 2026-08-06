@@ -1,0 +1,3 @@
+{"catalog":"Gaia","object_id":"Gaia-Var-11","ra_deg":150.00008,"dec_deg":2.00002,"positional_error_arcsec":0.1,"kind":"variable_star"}
+{"catalog":"Minor_Planet_Center","object_id":"2026 AB","ra_deg":33.00003,"dec_deg":-5.00002,"positional_error_arcsec":0.4,"kind":"minor_planet"}
+{"catalog":"SIMBAD","object_id":"SIMBAD-J000","ra_deg":290.0,"dec_deg":20.0,"positional_error_arcsec":0.2,"kind":"galaxy"}

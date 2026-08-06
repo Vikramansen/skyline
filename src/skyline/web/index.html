@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Skyline — Tonight's Follow-up Queue</title>
+    <style>
+      :root { --ink:#e9edff; --muted:#97a1c8; --panel:#141a33; --edge:#29335b; --sky:#080b19; --cyan:#72dcff; --gold:#f6c865; --rose:#ff8faa; }
+      * { box-sizing:border-box; }
+      body { margin:0; min-height:100vh; background:radial-gradient(circle at 85% 5%,#233567 0,transparent 28rem),var(--sky); color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+      main { max-width:1180px; margin:auto; padding:46px 24px 64px; }
+      header { display:flex; justify-content:space-between; gap:24px; align-items:end; border-bottom:1px solid var(--edge); padding-bottom:26px; }
+      .eyebrow { color:var(--cyan); letter-spacing:.16em; font-size:.75rem; text-transform:uppercase; }
+      h1 { font-family:Georgia,serif; font-size:clamp(2.5rem,7vw,5.4rem); line-height:.88; margin:12px 0 0; font-weight:400; }
+      .stamp { color:var(--muted); font-size:.8rem; line-height:1.7; text-align:right; }
+      .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:24px 0; }
+      .stat,.candidate { border:1px solid var(--edge); background:color-mix(in srgb,var(--panel) 91%,transparent); }
+      .stat { padding:16px; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; }
+      .stat strong { display:block; color:var(--ink); font-size:1.75rem; margin-top:8px; letter-spacing:0; }
+      #queue { display:grid; gap:12px; }
+      .candidate { display:grid; grid-template-columns:72px minmax(180px,1.4fr) minmax(190px,1fr) minmax(240px,1.7fr); gap:20px; align-items:center; padding:18px; }
+      .rank { color:var(--gold); font-size:1.5rem; }.name { font-size:1.08rem; }.coords,.meta { color:var(--muted); font-size:.76rem; margin-top:8px; }
+      .scores { display:flex; gap:16px; margin-top:10px; }.score-label { color:var(--muted); font-size:.68rem; text-transform:uppercase; }.score { font-size:1.2rem; color:var(--cyan); }
+      svg { display:block; width:100%; height:66px; margin:8px 0; }.curve { fill:none; stroke:var(--cyan); stroke-width:2; }.point-g { fill:var(--cyan); }.point-r { fill:var(--rose); }
+      ul { padding-left:18px; margin:4px 0; color:var(--muted); font-size:.76rem; line-height:1.55; }
+      .match { color:var(--gold); font-size:.75rem; }.empty { padding:32px; color:var(--muted); border:1px dashed var(--edge); }
+      @media (max-width:800px) { header,.candidate { display:block; }.stamp { text-align:left; margin-top:18px; }.stats { grid-template-columns:1fr; }.candidate > * + * { margin-top:14px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div><div class="eyebrow">Skyline / telescope follow-up allocator</div><h1>Tonight's sky,<br>ranked.</h1></div>
+        <div class="stamp" id="stamp">Loading ranking receipt…</div>
+      </header>
+      <section class="stats" id="stats"></section>
+      <section id="queue" aria-live="polite"></section>
+    </main>
+    <script>
+      const escape = (value) => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+      function sparkline(points) {
+        if (!points.length) return '';
+        const magnitudes = points.map(point => point.magnitude), times = points.map(point => point.jd);
+        const minMag=Math.min(...magnitudes), maxMag=Math.max(...magnitudes), minTime=Math.min(...times), maxTime=Math.max(...times);
+        const x = point => 4 + (point.jd-minTime) / Math.max(.0001,maxTime-minTime) * 212;
+        const y = point => 58 - (point.magnitude-minMag) / Math.max(.001,maxMag-minMag) * 50;
+        const line = points.map((point,index) => `${index?'L':'M'}${x(point).toFixed(1)},${y(point).toFixed(1)}`).join(' ');
+        const dots = points.map(point => `<circle class="point-${escape(point.band)}" cx="${x(point).toFixed(1)}" cy="${y(point).toFixed(1)}" r="3"/>`).join('');
+        return `<svg viewBox="0 0 220 66" role="img" aria-label="Multi-band light curve"><path class="curve" d="${line}"/>${dots}</svg>`;
+      }
+      function candidate(item,index) {
+        const match=item.cross_match ? `${escape(item.cross_match.kind)} · ${escape(item.cross_match.catalog)} · ${item.cross_match.separation_arcsec}&Prime;` : 'No known counterpart';
+        return `<article class="candidate"><div class="rank">${String(index+1).padStart(2,'0')}</div><div><div class="name">${escape(item.object_id)}</div><div class="coords">RA ${item.ra_deg.toFixed(4)}° · Dec ${item.dec_deg.toFixed(4)}° · age ${item.age_days.toFixed(2)}d</div><div class="scores"><div><div class="score-label">value</div><div class="score">${(item.value_score*100).toFixed(1)}</div></div><div><div class="score-label">confidence</div><div class="score">${(item.confidence*100).toFixed(1)}%</div></div></div></div><div>${sparkline(item.light_curve)}<div class="match">${match}</div></div><ul>${item.reasons.map(reason=>`<li>${escape(reason)}</li>`).join('')}</ul></article>`;
+      }
+      async function load() {
+        const response=await fetch('/tonight');
+        if (!response.ok) throw new Error(`Ranking endpoint returned ${response.status}`);
+        const payload=await response.json();
+        document.querySelector('#stamp').textContent=`${payload.model} model\nfollow-up budget ${payload.budget}`;
+        document.querySelector('#stats').innerHTML=`<div class="stat">Objects considered<strong>${payload.objects_considered}</strong></div><div class="stat">Follow-up budget<strong>${payload.budget}</strong></div><div class="stat">Ranking model<strong>${escape(payload.model)}</strong></div>`;
+        document.querySelector('#queue').innerHTML=payload.ranked.length ? payload.ranked.map(candidate).join('') : '<div class="empty">No candidates returned for this night.</div>';
+      }
+      load().catch(error=>{ document.querySelector('#queue').innerHTML=`<div class="empty">Could not load tonight’s ranking: ${escape(error.message)}</div>`; });
+    </script>
+  </body>
+</html>
