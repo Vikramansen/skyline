@@ -3,64 +3,40 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skyline — Tonight's Follow-up Queue</title>
+    <title>Skyline — Follow-up Operations</title>
     <style>
-      :root { --ink:#e9edff; --muted:#97a1c8; --panel:#141a33; --edge:#29335b; --sky:#080b19; --cyan:#72dcff; --gold:#f6c865; --rose:#ff8faa; }
-      * { box-sizing:border-box; }
-      body { margin:0; min-height:100vh; background:radial-gradient(circle at 85% 5%,#233567 0,transparent 28rem),var(--sky); color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
-      main { max-width:1180px; margin:auto; padding:46px 24px 64px; }
-      header { display:flex; justify-content:space-between; gap:24px; align-items:end; border-bottom:1px solid var(--edge); padding-bottom:26px; }
-      .eyebrow { color:var(--cyan); letter-spacing:.16em; font-size:.75rem; text-transform:uppercase; }
-      h1 { font-family:Georgia,serif; font-size:clamp(2.5rem,7vw,5.4rem); line-height:.88; margin:12px 0 0; font-weight:400; }
-      .stamp { color:var(--muted); font-size:.8rem; line-height:1.7; text-align:right; }
-      .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:24px 0; }
-      .stat,.candidate { border:1px solid var(--edge); background:color-mix(in srgb,var(--panel) 91%,transparent); }
-      .stat { padding:16px; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; }
-      .stat strong { display:block; color:var(--ink); font-size:1.75rem; margin-top:8px; letter-spacing:0; }
-      #queue { display:grid; gap:12px; }
-      .candidate { display:grid; grid-template-columns:72px minmax(180px,1.4fr) minmax(190px,1fr) minmax(240px,1.7fr); gap:20px; align-items:center; padding:18px; }
-      .rank { color:var(--gold); font-size:1.5rem; }.name { font-size:1.08rem; }.coords,.meta { color:var(--muted); font-size:.76rem; margin-top:8px; }
-      .scores { display:flex; gap:16px; margin-top:10px; }.score-label { color:var(--muted); font-size:.68rem; text-transform:uppercase; }.score { font-size:1.2rem; color:var(--cyan); }
-      svg { display:block; width:100%; height:66px; margin:8px 0; }.curve { fill:none; stroke:var(--cyan); stroke-width:2; }.point-g { fill:var(--cyan); }.point-r { fill:var(--rose); }
-      ul { padding-left:18px; margin:4px 0; color:var(--muted); font-size:.76rem; line-height:1.55; }
-      .match { color:var(--gold); font-size:.75rem; }.empty { padding:32px; color:var(--muted); border:1px dashed var(--edge); }
-      @media (max-width:800px) { header,.candidate { display:block; }.stamp { text-align:left; margin-top:18px; }.stats { grid-template-columns:1fr; }.candidate > * + * { margin-top:14px; } }
+      :root { --ink:#eef1ff; --muted:#99a6ce; --panel:#121a34; --edge:#2a3965; --sky:#070a18; --cyan:#75dbff; --gold:#f4c766; --rose:#ff91ad; --green:#8bdcaf; --danger:#f29292; }
+      * { box-sizing:border-box; } body { margin:0; min-height:100vh; background:radial-gradient(circle at 90% 0,#273b70 0,transparent 32rem),var(--sky); color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+      main { max-width:1240px; margin:auto; padding:42px 24px 70px; } header { display:flex; justify-content:space-between; align-items:end; gap:24px; border-bottom:1px solid var(--edge); padding-bottom:24px; }.eyebrow { color:var(--cyan); letter-spacing:.16em; font-size:.72rem; text-transform:uppercase; } h1 { font-family:Georgia,serif; font-size:clamp(2.4rem,7vw,5.2rem); line-height:.86; font-weight:400; margin:12px 0 0; }.stamp { color:var(--muted); font-size:.75rem; line-height:1.7; text-align:right; }
+      .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:24px 0 14px; }.stat,.candidate,.toolbar { border:1px solid var(--edge); background:color-mix(in srgb,var(--panel) 92%,transparent); }.stat { padding:15px; color:var(--muted); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; }.stat strong { display:block; color:var(--ink); font-size:1.55rem; margin-top:9px; letter-spacing:0; }
+      .toolbar { padding:13px; display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; }.toolbar label { color:var(--muted); font-size:.75rem; } select,button,.export { font:inherit; font-size:.72rem; border:1px solid var(--edge); border-radius:2px; background:#0c1227; color:var(--ink); padding:8px 9px; } button { cursor:pointer; } button:hover,.export:hover { border-color:var(--cyan); }.export { color:var(--cyan); text-decoration:none; }
+      #queue { display:grid; gap:12px; }.candidate { display:grid; grid-template-columns:58px minmax(170px,1.2fr) minmax(175px,.9fr) minmax(235px,1.4fr); gap:18px; align-items:center; padding:17px; }.rank { color:var(--gold); font-size:1.45rem; }.name { font-size:1.05rem; }.coords,.meta { color:var(--muted); font-size:.73rem; margin-top:7px; }.scores { display:flex; gap:15px; margin-top:10px; }.score-label { color:var(--muted); font-size:.65rem; text-transform:uppercase; }.score { font-size:1.13rem; color:var(--cyan); }
+      svg { display:block; width:100%; height:56px; margin:5px 0; }.curve { fill:none; stroke:var(--cyan); stroke-width:2; }.point-g { fill:var(--cyan); }.point-r { fill:var(--rose); }.point-i { fill:var(--gold); }.match { color:var(--gold); font-size:.71rem; }.reasons { padding-left:17px; margin:6px 0; color:var(--muted); font-size:.72rem; line-height:1.5; }
+      .review { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-top:11px; }.review button { padding:6px 7px; }.review button[data-decision="follow_up"] { color:var(--green); }.review button[data-decision="dismiss"] { color:var(--rose); }.badge { display:inline-block; border:1px solid var(--edge); color:var(--muted); padding:3px 6px; font-size:.63rem; text-transform:uppercase; }.badge.follow_up { color:var(--green); border-color:var(--green); }.badge.watch { color:var(--gold); border-color:var(--gold); }.badge.dismiss { color:var(--rose); border-color:var(--rose); }.empty { padding:32px; color:var(--muted); border:1px dashed var(--edge); }.note { color:var(--muted); font-size:.68rem; width:100%; }
+      .guide { margin:14px 0; border:1px solid var(--edge); background:color-mix(in srgb,var(--panel) 92%,transparent); }.guide summary { cursor:pointer; padding:14px; color:var(--cyan); font-size:.78rem; }.guide-body { border-top:1px solid var(--edge); padding:15px; display:grid; grid-template-columns:1.1fr 1fr; gap:22px; }.guide p,.guide li { color:var(--muted); font-size:.74rem; line-height:1.55; }.guide ol { padding-left:20px; margin:0; }.guide code { display:block; white-space:pre-wrap; background:#080d20; border:1px solid #202b50; color:var(--ink); padding:10px; margin-top:7px; font-size:.72rem; }.date-row { display:flex; gap:9px; align-items:center; flex-wrap:wrap; }.date-row input { color-scheme:dark; background:#0c1227; color:var(--ink); border:1px solid var(--edge); padding:7px; font:inherit; font-size:.75rem; }.source { color:var(--gold); }
+      @media (max-width:850px) { header,.candidate { display:block; }.stamp { text-align:left; margin-top:18px; }.stats { grid-template-columns:repeat(2,1fr); }.candidate > * + * { margin-top:14px; }.toolbar { align-items:flex-start; flex-direction:column; } }
     </style>
   </head>
   <body>
     <main>
-      <header>
-        <div><div class="eyebrow">Skyline / telescope follow-up allocator</div><h1>Tonight's sky,<br>ranked.</h1></div>
-        <div class="stamp" id="stamp">Loading ranking receipt…</div>
-      </header>
+      <header><div><div class="eyebrow">Skyline / follow-up operations console</div><h1>Tonight's sky,<br>actioned.</h1></div><div class="stamp" id="stamp">Loading ranking snapshot…</div></header>
       <section class="stats" id="stats"></section>
+      <details class="guide" open><summary>Get real data from the public alert broker</summary><div class="guide-body"><div><p>Skyline starts with an alert broker, not a private telescope feed. Choose a UTC observation date; the helper turns it into the Modified Julian Date (MJD) required by the download command.</p><div class="date-row"><label for="observing-date">UTC date</label><input id="observing-date" type="date"><span id="mjd-label" class="source"></span></div><code id="download-command"></code></div><div><ol><li>Run the download command in the Skyline project folder.</li><li>Run <code>make real-tonight</code> to rank the saved real alerts.</li><li>Restart <code>make dashboard</code> with the real alert paths if you want this page to display that batch.</li></ol><p>Each download writes a local receipt with source, date range, row count, and retrieval time. The data stays on your machine and is excluded from Git.</p></div></div></details>
+      <section class="toolbar"><label>Show <select id="filter"><option value="all">all targets</option><option value="unreviewed">unreviewed</option><option value="follow_up">follow-up</option><option value="watch">watch</option><option value="dismiss">dismissed</option></select></label><a id="export" class="export" href="#">Export observation plan (.csv)</a></section>
       <section id="queue" aria-live="polite"></section>
     </main>
     <script>
-      const escape = (value) => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
-      function sparkline(points) {
-        if (!points.length) return '';
-        const magnitudes = points.map(point => point.magnitude), times = points.map(point => point.jd);
-        const minMag=Math.min(...magnitudes), maxMag=Math.max(...magnitudes), minTime=Math.min(...times), maxTime=Math.max(...times);
-        const x = point => 4 + (point.jd-minTime) / Math.max(.0001,maxTime-minTime) * 212;
-        const y = point => 58 - (point.magnitude-minMag) / Math.max(.001,maxMag-minMag) * 50;
-        const line = points.map((point,index) => `${index?'L':'M'}${x(point).toFixed(1)},${y(point).toFixed(1)}`).join(' ');
-        const dots = points.map(point => `<circle class="point-${escape(point.band)}" cx="${x(point).toFixed(1)}" cy="${y(point).toFixed(1)}" r="3"/>`).join('');
-        return `<svg viewBox="0 0 220 66" role="img" aria-label="Multi-band light curve"><path class="curve" d="${line}"/>${dots}</svg>`;
-      }
-      function candidate(item,index) {
-        const match=item.cross_match ? `${escape(item.cross_match.kind)} · ${escape(item.cross_match.catalog)} · ${item.cross_match.separation_arcsec}&Prime;` : 'No known counterpart';
-        return `<article class="candidate"><div class="rank">${String(index+1).padStart(2,'0')}</div><div><div class="name">${escape(item.object_id)}</div><div class="coords">RA ${item.ra_deg.toFixed(4)}° · Dec ${item.dec_deg.toFixed(4)}° · age ${item.age_days.toFixed(2)}d</div><div class="scores"><div><div class="score-label">value</div><div class="score">${(item.value_score*100).toFixed(1)}</div></div><div><div class="score-label">confidence</div><div class="score">${(item.confidence*100).toFixed(1)}%</div></div></div></div><div>${sparkline(item.light_curve)}<div class="match">${match}</div></div><ul>${item.reasons.map(reason=>`<li>${escape(reason)}</li>`).join('')}</ul></article>`;
-      }
-      async function load() {
-        const response=await fetch('/tonight');
-        if (!response.ok) throw new Error(`Ranking endpoint returned ${response.status}`);
-        const payload=await response.json();
-        document.querySelector('#stamp').textContent=`${payload.model} model\nfollow-up budget ${payload.budget}`;
-        document.querySelector('#stats').innerHTML=`<div class="stat">Objects considered<strong>${payload.objects_considered}</strong></div><div class="stat">Follow-up budget<strong>${payload.budget}</strong></div><div class="stat">Ranking model<strong>${escape(payload.model)}</strong></div>`;
-        document.querySelector('#queue').innerHTML=payload.ranked.length ? payload.ranked.map(candidate).join('') : '<div class="empty">No candidates returned for this night.</div>';
-      }
-      load().catch(error=>{ document.querySelector('#queue').innerHTML=`<div class="empty">Could not load tonight’s ranking: ${escape(error.message)}</div>`; });
+      const escape=value=>String(value).replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+      let state=null;
+      function mjdForDate(value) { return Math.floor(Date.parse(`${value}T00:00:00Z`) / 86400000) + 40587; }
+      function updateDataGuide() { const input=document.querySelector('#observing-date'), mjd=mjdForDate(input.value); document.querySelector('#mjd-label').textContent=`MJD ${mjd}`; document.querySelector('#download-command').textContent=`make real-data MJD_START=${mjd} MJD_END=${mjd+1}`; }
+      function sparkline(points) { if (!points.length) return ''; const mags=points.map(p=>p.magnitude), times=points.map(p=>p.jd), lo=Math.min(...mags), hi=Math.max(...mags), first=Math.min(...times), last=Math.max(...times); const x=p=>4+(p.jd-first)/Math.max(.0001,last-first)*202, y=p=>50-(p.magnitude-lo)/Math.max(.001,hi-lo)*42; return `<svg viewBox="0 0 210 58" role="img" aria-label="Multi-band light curve"><path class="curve" d="${points.map((p,i)=>`${i?'L':'M'}${x(p).toFixed(1)},${y(p).toFixed(1)}`).join(' ')}"/>${points.map(p=>`<circle class="point-${escape(p.band)}" cx="${x(p).toFixed(1)}" cy="${y(p).toFixed(1)}" r="3"/>`).join('')}</svg>`; }
+      function reviewPanel(item) { const review=item.review; const label=review.decision.replace('_',' '); return `<div class="review"><span class="badge ${escape(review.decision)}">${escape(label)}</span><button data-object="${escape(item.object_id)}" data-decision="follow_up">follow up</button><button data-object="${escape(item.object_id)}" data-decision="watch">watch</button><button data-object="${escape(item.object_id)}" data-decision="dismiss">dismiss</button>${review.note?`<span class="note">note: ${escape(review.note)}</span>`:''}</div>`; }
+      function candidate(item,index) { const match=item.cross_match?`${escape(item.cross_match.kind)} · ${escape(item.cross_match.catalog)} · ${item.cross_match.separation_arcsec}&Prime;`:'No known counterpart'; return `<article class="candidate" data-status="${escape(item.review.decision)}"><div class="rank">${String(index+1).padStart(2,'0')}</div><div><div class="name">${escape(item.object_id)}</div><div class="coords">RA ${item.ra_deg.toFixed(4)}° · Dec ${item.dec_deg.toFixed(4)}° · age ${item.age_days.toFixed(2)}d</div><div class="scores"><div><div class="score-label">value</div><div class="score">${(item.value_score*100).toFixed(1)}</div></div><div><div class="score-label">confidence</div><div class="score">${(item.confidence*100).toFixed(1)}%</div></div></div>${reviewPanel(item)}</div><div>${sparkline(item.light_curve)}<div class="match">${match}</div></div><ul class="reasons">${item.reasons.map(reason=>`<li>${escape(reason)}</li>`).join('')}</ul></article>`; }
+      function render() { const filter=document.querySelector('#filter').value, targets=state.ranked.filter(item=>filter==='all'||item.review.decision===filter), decisions=state.ranked.reduce((all,item)=>{all[item.review.decision]=(all[item.review.decision]||0)+1;return all;},{}); const fetched=state.source.retrieved_at?`\nretrieved ${new Date(state.source.retrieved_at).toLocaleString()}`:''; document.querySelector('#stamp').textContent=`snapshot ${state.run_id}\n${state.model} model · budget ${state.budget}\n${state.source.label}${fetched}`; document.querySelector('#stats').innerHTML=`<div class="stat">Objects considered<strong>${state.objects_considered}</strong></div><div class="stat">Ranked targets<strong>${state.ranked.length}</strong></div><div class="stat">Follow-up<strong>${decisions.follow_up||0}</strong></div><div class="stat">Pending review<strong>${decisions.unreviewed||0}</strong></div>`; document.querySelector('#export').href=`/v1/export/observation-plan?run_id=${encodeURIComponent(state.run_id)}`; document.querySelector('#queue').innerHTML=targets.length?targets.map(candidate).join(''):'<div class="empty">No targets match this review filter.</div>'; }
+      async function updateReview(event) { const button=event.target.closest('button[data-decision]'); if (!button) return; const note=window.prompt('Optional observing note (max 280 characters):',''); if (note===null) return; button.disabled=true; try { const response=await fetch(`/v1/candidates/${encodeURIComponent(button.dataset.object)}/review?run_id=${encodeURIComponent(state.run_id)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({decision:button.dataset.decision,note})}); if(!response.ok) throw new Error((await response.json()).detail||'review update failed'); const review=await response.json(); state.ranked.find(item=>item.object_id===review.object_id).review=review; render(); } catch(error) { window.alert(`Could not save review: ${error.message}`); button.disabled=false; } }
+      async function load() { const response=await fetch('/tonight'); if(!response.ok) throw new Error(`Ranking endpoint returned ${response.status}`); state=await response.json(); render(); }
+      document.querySelector('#filter').addEventListener('change',render); document.querySelector('#queue').addEventListener('click',updateReview); document.querySelector('#observing-date').addEventListener('change',updateDataGuide); document.querySelector('#observing-date').value=new Date().toISOString().slice(0,10); updateDataGuide(); load().catch(error=>{document.querySelector('#queue').innerHTML=`<div class="empty">Could not load tonight’s ranking: ${escape(error.message)}</div>`;});
     </script>
   </body>
 </html>
