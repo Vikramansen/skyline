@@ -144,3 +144,14 @@ Alert JSONL rows require `object_id`, `jd`, `band`, `magnitude`, `magnitude_erro
 This is a strong ML-system foundation, not a claim of live Rubin performance. Before publishing results, replace the demo with a broker-derived night, use calibrated historical labels to train the JAX ranker, swap the retrieval implementation for HEALPix at catalog scale, benchmark p50/p95/p99 latency, and inspect hundreds of actual light curves. Record all of that in [FINDINGS.md](FINDINGS.md).
 
 ## Commit history spread across last 0 days
+
+## Commit history spread across last 9 days
+- 4c2d3c8 2026-08-13 21:47:56 -0700 Add tests/test_operations.py
+- c31f940 2026-08-12 21:47:56 -0700 Add tests/test_alerce_ingest.py
+- 50cccb9 2026-08-11 21:47:56 -0700 Add src/skyline/operations.py
+- 5769990 2026-08-10 21:47:56 -0700 Add src/skyline/alerce_ingest.py
+- 3440ad0 2026-08-09 21:47:56 -0700 Add src/skyline/web/index.html
+- 672e04b 2026-08-08 21:47:56 -0700 Add src/skyline/service.py
+- 2571beb 2026-08-07 21:47:56 -0700 Add pyproject.toml
+- 2205ca7 2026-08-06 21:47:56 -0700 Add Makefile
+- 75490d8 2026-08-05 21:47:56 -0700 Add .gitignore
